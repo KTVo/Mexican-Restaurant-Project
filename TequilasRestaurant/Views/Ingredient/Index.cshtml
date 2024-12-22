@@ -25,6 +25,7 @@
                     @*asp-action -> Tells controller that the anchor tag should go to the Details page when clicked.*@
                     @*asp-route-id -> Sets the id with IngredientId to query for an ingredient. we have defined IngredientId in our Db.*@
                     <a asp-action="Details" asp-route-id="@ingredient.IngredientId">Details</a>
+                    <a asp-action="Delete" asp-route-id="@ingredient.IngredientId">Delete</a>
                 </td>
             </tr>
         }

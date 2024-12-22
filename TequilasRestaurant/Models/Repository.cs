@@ -41,15 +41,17 @@ namespace TequilasRestaurant.Models
             var key = _context.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.FirstOrDefault();
             //Sets the Name from the primary key
             string primaryKeyName = key?.Name;
-            Console.Write("primaryKey = " + primaryKeyName);
+
             //Returns a link query that equals to the given id
             //In this case, you'd click on the Details link and that would send in the key for you
             return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, primaryKeyName) == id);
         }
 
-        public Task AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            //Adding incoming entity to the table
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public Task UpdateAsync(T entity)
@@ -57,9 +59,11 @@ namespace TequilasRestaurant.Models
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            T entity = await _dbSet.FindAsync(id);
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }
