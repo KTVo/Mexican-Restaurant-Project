@@ -36,9 +36,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// changed default controller from Home to Ingredient, so it'll go there first
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Ingredient}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
