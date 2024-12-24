@@ -25,14 +25,14 @@ namespace TequilasRestaurant.Controllers
 
         //Ingredient/Create
         [HttpGet]
-        //?why use [ValidateAntiForgeryToken]? And when?
-        [ValidateAntiForgeryToken]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        //? Why use [ValidateAntiForgeryToken]?
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IngredientId, Name")] Ingredient ingredient)
         {
             // If something is wrong with queried data, redirect to main page
@@ -63,6 +63,27 @@ namespace TequilasRestaurant.Controllers
         {
             await ingredients.DeleteAsync(ingredient.IngredientId);
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            // id is sent in from the View when clicking "Edit" link
+            //then, line below will call on the database to get the ingredent
+            //after, it will sent to the view to be shown to ask if you're sure if you want to edit this
+            return View(await ingredients.GetByIdAsync(id, new QueryOptions<Ingredient>() { Includes = "ProductIngredients.Product" }));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Ingredient ingredient)
+        {
+            if (ModelState.IsValid)
+            {
+                await ingredients.UpdateAsync(ingredient);
+                return RedirectToAction("Index");
+            }
+            return View(ingredients);
         }
     }
 }
