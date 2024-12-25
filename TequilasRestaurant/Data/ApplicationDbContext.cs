@@ -59,9 +59,9 @@ namespace TequilasRestaurant.Data
 
             // Adding some seed data - product (actual food) table
             modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = 1, Name = "Taco Beef", Description = "A delicious beef taco", Price = 2.50m, Stock = 100, CategoryId = 2 },
-                new Product { ProductId = 2, Name = "Taco Chicken", Description = "A delicious chicken taco", Price = 2.50m, Stock = 101, CategoryId = 2 },
-                new Product { ProductId = 3, Name = "Taco Fish", Description = "A delicious fish taco", Price = 2.50m, Stock = 90, CategoryId = 2 }
+                new Product { ProductId = 1, Name = "Beef Taco", Description = "A delicious beef taco", Price = 2.50m, Stock = 100, CategoryId = 2 },
+                new Product { ProductId = 2, Name = "Chicken Taco", Description = "A delicious chicken taco", Price = 2.50m, Stock = 101, CategoryId = 2 },
+                new Product { ProductId = 3, Name = "Fish Taco", Description = "A delicious fish taco", Price = 2.50m, Stock = 90, CategoryId = 2 }
                 );
 
             // wiring up - relating the ingredients to the food product #1

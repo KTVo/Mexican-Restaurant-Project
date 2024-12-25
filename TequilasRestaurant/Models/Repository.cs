@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Options;
 using TequilasRestaurant.Data;
 
+
+//Contains the CRUD operations code
+
 namespace TequilasRestaurant.Models
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -11,7 +14,7 @@ namespace TequilasRestaurant.Models
 
         public Repository(ApplicationDbContext context)
         {
-            _context = context; // Used to create a conection to the Db
+            _context = context; // Used to create a connection to the Db
             _dbSet = context.Set<T>(); // Used to specify our tables
         }
 

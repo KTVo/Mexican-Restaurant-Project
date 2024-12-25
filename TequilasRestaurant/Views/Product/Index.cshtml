@@ -1,0 +1,32 @@
+﻿@*//?Why use IEnumerable?*@
+@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "Tequilas Menu Items";
+}
+
+<h2>Tequilas Menu Items</h2>
+
+<a asp-action="AddEdit" asp-controller="Product" class="btn btn-primary">Create New Item</a>
+
+<div class="row">
+    @foreach (Product prod in Model)
+    {
+        <div class="col-md-4" style="margin-bottom: 2rem;">
+            <form asp-action="delete" asp-controller="product" method="post" >
+                @* sends ProductId of locally looped prod to controller to view Db details on that product*@
+                <input type="hidden" asp-for="@prod.ProductId" name="id" value="@prod.ProductId"/>
+                <div class="card" sytle="width: 18rem;">
+                    <img src="@Url.Content("~/images/" + prod?.ImageUrl)" class="card-img-top fixed-image-height" alt="@prod.Description" />
+                    <div class="card-body">
+                        <h5 class="card-title">@prod.Name</h5>
+                        <p class="card-text">@prod.Description</p>
+                        <p class="card-text">@prod.Price.ToString("C")</p>
+                        <p class="card-text">Quantity In Stock: @prod.Stock</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+
+</div>
