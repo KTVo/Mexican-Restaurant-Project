@@ -1,4 +1,5 @@
-﻿@model Product
+﻿@*This is to allow the code below to know which controller to refer to which is linked to its model *@
+@model Product
 
 @{
     ViewBag.Title = $"{ViewBag.Operation} Menu Item";
@@ -39,14 +40,16 @@
         <input asp-for="Stock" class="form-control" name="Stock" />
         <span asp-validation-for="Stock" class="text-danger"></span>
     </div>
+
     @* Browse+Upload for entering Ingredients of new item *@
     <div class="form-group">
         <label for="imageUpload">Upload Image</label>
         <input type="file" class="form-control" id="imageUpload" name="ImageFile" asp-for="ImageFile" />
     </div>
-    @* Radio for entering Ingredients of new item *@
+    
     <div class="row">
         <div class="col">
+            @* Radio for entering Ingredients of new item *@
             <h4>Select Category</h4>
             @foreach (Category category in ViewBag.Categories)
             {
@@ -60,10 +63,9 @@
                 </div>
             }
         </div>
-    </div>
-    @* Checkbox(es) for entering Ingredients of new item *@
-    <div class="row">
+
         <div class="col">
+            @* Checkbox(es) for entering Ingredients of new item *@
             <h4>Select Ingredient(s)</h4>
             @foreach (Ingredient ingredient in ViewBag.Ingredients)
             {
@@ -82,6 +84,8 @@
             }
         </div>
     </div>
+
+
     <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-outline-dark">Cancel</a>
+    <a asp-action="Index" asp-controller="Product" class="btn btn-outline-dark">Cancel</a>
 </form>

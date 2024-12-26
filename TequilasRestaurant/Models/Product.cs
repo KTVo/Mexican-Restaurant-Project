@@ -6,6 +6,12 @@ namespace TequilasRestaurant.Models
 {
     public class Product
     {
+        public Product()
+        {
+            //Declaring an empty list for storing ingredients of each product
+            ProductIngredients = new List<ProductIngredient>();
+        }
+
         static readonly string profile_pic = "https://www.greendrop.com/assets/images/beautiful-tree-with-large-green-top.jpg";
         public int ProductId { get; set; }
         public string? Name { get; set; }

@@ -43,8 +43,16 @@ namespace TequilasRestaurant.Controllers
             }
             else
             {
+                //Getting the Product by Id to edit
+                Product product = await products.GetByIdAsync(id, new QueryOptions<Product>
+                {
+                    Includes = "ProductIngredients.Ingredient, Category"
+                });
+
                 ViewBag.Operation = "Edit";
-                return View();
+
+                //Send product to view so user can edit upon w/ GUI
+                return View(product);
             }
 
         }
@@ -55,8 +63,10 @@ namespace TequilasRestaurant.Controllers
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddEdit(Product product, int[] ingredientId, int catId)
+        public async Task<IActionResult> AddEdit(Product product, int[] ingredientIds, int catId)
         {
+            ViewBag.Ingredients = await ingredients.GetAllAsync();
+            ViewBag.Categories = await categories.GetAllAsync();
 
             if (ModelState.IsValid)
             {
@@ -74,16 +84,16 @@ namespace TequilasRestaurant.Controllers
 
                     product.ImageUrl = uniqueFileName;
                 }
-                
+
                 //If product DNE, create it
                 if (product.ProductId == 0)
                 {
                     ViewBag.Ingredients = await ingredients.GetAllAsync();
-                    ViewBag.Categories = await ingredients.GetAllAsync();
+                    ViewBag.Categories = await categories.GetAllAsync();
                     product.CategoryId = catId;
 
                     //add ingredients
-                    foreach (int id in ingredientId)
+                    foreach (int id in ingredientIds)
                     {
                         product.ProductIngredients?.Add(new ProductIngredient { IngredientId = id, ProductId = product.ProductId });
                     }
@@ -91,8 +101,56 @@ namespace TequilasRestaurant.Controllers
                     await products.AddAsync(product);
                     return RedirectToAction("Index", "Product");
                 }
+                //Else update the product
                 else
                 {
+                    //The Product product gotten from the parameter has been change is it's not like the one on the DB anymore
+                    //so using that will not work
+                    //Therefore, we need to find that Product on the db using the ProductId first b/c that has not changed
+                    //The Product on the db to be changed by paramter product
+                    var existingProduct = await products.GetByIdAsync(product.ProductId, new QueryOptions<Product> { Includes = "ProductIngredients" });
+
+                    //If the product DNE, go back to the Edit View on that Product
+                    if (existingProduct == null)
+                    {
+                        ModelState.AddModelError("", "Product not found.");
+                        ViewBag.Ingredients = await ingredients.GetAllAsync();
+                        ViewBag.CategoryIds = await categories.GetAllAsync();
+                        return View(product);
+                    }
+
+                    // Set the existing product to update
+                    existingProduct.Name = product.Name;
+                    existingProduct.Description = product.Description; 
+                    existingProduct.Price = product.Price;
+                    existingProduct.Stock = product.Stock;
+                    existingProduct.CategoryId = catId;
+
+                    if (product.ImageFile != null)
+                        existingProduct.ImageUrl = product.ImageUrl;
+
+                    // Update the ingredients
+                    // Clear the list
+                    existingProduct.ProductIngredients?.Clear();
+                    //Populate with new Ingredients
+                    foreach (int id in ingredientIds)
+                    {
+                        existingProduct.ProductIngredients?.Add(new ProductIngredient { IngredientId=id, ProductId = product.ProductId });
+                    }
+
+                    try
+                    {
+                        await products.UpdateAsync(existingProduct);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", $"Error: {ex.GetBaseException().Message}");
+                        ViewBag.Ingredients = await ingredients.GetAllAsync();
+                        ViewBag.Categories = await categories.GetAllAsync();
+                        return View(product);
+                    }
+
+                    //Returns to the Index with the Product controller
                     return RedirectToAction("Index", "Product");
                 }
             }

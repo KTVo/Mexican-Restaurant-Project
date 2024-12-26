@@ -7,12 +7,12 @@
 
 <h2>Tequilas Menu Items</h2>
 
-<a asp-action="AddEdit" asp-controller="Product" class="btn btn-primary">Create New Item</a>
+<a asp-action="AddEdit" asp-controller="Product" class="btn btn-primary" style="margin-bottom: 2rem;">Create New Item</a>
 
 <div class="row">
     @foreach (Product prod in Model)
     {
-        <div class="col-md-4" style="margin-bottom: 2rem;">
+        <div class="col-md-4" style="margin-bottom: 1.5rem;">
             <form asp-action="delete" asp-controller="product" method="post" >
                 @* sends ProductId of locally looped prod to controller to view Db details on that product*@
                 <input type="hidden" asp-for="@prod.ProductId" name="id" value="@prod.ProductId"/>
@@ -23,6 +23,8 @@
                         <p class="card-text">@prod.Description</p>
                         <p class="card-text">@prod.Price.ToString("C")</p>
                         <p class="card-text">Quantity In Stock: @prod.Stock</p>
+                        @* Uses the BootStrap pencil icon for the Edit product button *@
+                        <a class="btn btn-info" asp-controller="Product" asp-action="AddEdit" asp-route-id="@prod.ProductId"><i class="bg-info bi-pencil-fill">Edit</i></a>
                     </div>
                 </div>
             </form>
