@@ -88,8 +88,6 @@ namespace TequilasRestaurant.Controllers
                 //If product DNE, create it
                 if (product.ProductId == 0)
                 {
-                    ViewBag.Ingredients = await ingredients.GetAllAsync();
-                    ViewBag.Categories = await categories.GetAllAsync();
                     product.CategoryId = catId;
 
                     //add ingredients
@@ -155,12 +153,24 @@ namespace TequilasRestaurant.Controllers
                 }
             }
 
-     
             return View(product);
                 
-          
+        }
 
-            
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await products.DeleteAsync(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Product not found");
+                return RedirectToAction("Index");
+            }
+
         }
 
     }
