@@ -1,4 +1,4 @@
-# ASPNetCoreMVC
+# Mexican Restaurant Project - ASPNetCoreMVC
  
 🌮 Mexican Restaurant Project 🌮
 Welcome to the Mexican Restaurant Project! This fun and interactive web application is designed to manage a Mexican restaurant's inventory and menu with ease. Using a powerful ASP.NET Core API for backend operations and a dynamic ReactJS frontend, this project is the perfect blend of modern web technologies.
